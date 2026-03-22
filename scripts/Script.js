@@ -77,7 +77,7 @@ function lancerJeu(){
 
     afficherProposition(listeProposition[i])
     btnValider.addEventListener("click" , () => {
-        console.log("j'ai cliquer sur valider")
+
         if (inputEcriture.value  === zoneProposition.innerText){
             score++
         }
@@ -91,6 +91,25 @@ function lancerJeu(){
         inputEcriture.value = ''
 
         afficherScore(score, i)
+    })
+
+    inputEcriture.addEventListener("keydown", (event) =>{
+        if(event.key === "Enter"){
+            if (inputEcriture.value  === zoneProposition.innerText){
+            score++
+        }
+        i++
+        if (listeProposition[i] === undefined){
+            afficherProposition("Le jeu est terminer !")
+            inputEcriture.disabled = true
+            btnValider.desabled = true
+        } else {
+        afficherProposition(listeProposition[i])
+        }
+        inputEcriture.value = ''
+
+        afficherScore(score, i)
+        }
     })
 
     for(let j = 0; j < ListeBtnRadio.length; j++){
