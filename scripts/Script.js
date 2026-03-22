@@ -26,18 +26,47 @@ function verifierBalise(balise){
 }
 
 function validerNom(nom){
-    if (nom.trim().length >= 2){
-        return true
+    if (nom.trim().length < 2){
+        throw new Error(`le nom est trop cours`)
     } 
-    return false
+}
+
+function afficherMessageErreur(message){
+    let spanErreurMessage = document.getElementById("erreurMessage")
+
+
+    if(!spanErreurMessage){
+        let popup = document.querySelector(".popup")
+        spanErreurMessage = document.createElement("span")
+        spanErreurMessage.id = "erreurMessage"
+        popup.append(spanErreurMessage)
+    }
+        spanErreurMessage.innerText = message
 }
 
 function validerEmail(email){
     let emailRegExp = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9._-]+$");
-    if(emailRegExp.test(email)){
-        return true
+    if(!emailRegExp.test(email)){
+        throw new Error (`l'email n'est pas valide`)
     }
-    return false
+}
+
+function gererFormulaire(scoreEmail){
+
+    try{
+        let baliseNom = document.getElementById("nom")
+        let baliseEmail = document.getElementById("email")
+        nom = baliseNom.value;
+        email = baliseEmail.value;
+        validerNom(nom)
+        validerEmail(email)
+        afficherEmail(nom, email, scoreEmail)
+        afficherMessageErreur("")
+       
+    } catch(erreur){
+        afficherMessageErreur(erreur.message);
+    
+    }
 }
 
 function lancerJeu(){
@@ -80,18 +109,8 @@ function lancerJeu(){
 
     form.addEventListener("submit", (event) =>{
         event.preventDefault();
-        let baliseNom = document.getElementById("nom")
-        let baliseEmail = document.getElementById("email")
-        nom = baliseNom.value;
-        email = baliseEmail.value;
-
-        if (validerNom(nom) && validerEmail(email)){
-            let scoreEmail = `${score}/${i}`
-            afficherEmail(nom, email, scoreEmail)
-        } else {
-            console.log("erreur")
-        }
-
+        let scoreEmail = `${score}/${i}`
+        gererFormulaire(scoreEmail)
     })
 
 }
